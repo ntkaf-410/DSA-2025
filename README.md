@@ -26,4 +26,12 @@ Nao Nakangombe 224026569
 3. Made components attach to the correct asset (they’re stored under that asset)
 4. Saved component information inside the asset data whenever it’s created or updated
 
+Jedidja Mbinga 224016148
+
+1. Added support for creating new schedules using POST, assets, assetTag, and schedules
+2. Enabled schedule removal via DELETE, assets,assetTag, schedules, and scheduleId
+
+3. Implemented POST, assets, assetTag, and workorders to create work order
+4. Implemented updates to existing work orders through PUT, assets, assetTag, workorders, andworkOrderId
+
 
