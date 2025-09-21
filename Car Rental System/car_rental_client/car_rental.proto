@@ -1,0 +1,98 @@
+syntax = "proto3";
+
+package car_rental;
+
+import "google/protobuf/empty.proto";
+
+// Car message definition
+message Car {
+    string make = 1;
+    string model = 2;
+    int32 year = 3;
+    float dailyPrice = 4;
+    int32 mileage = 5;
+    string numberPlate = 6;
+    string status = 7; // "AVAILABLE" or "UNAVAILABLE"
+}
+
+// User message definition
+message User {
+    string userId = 1;
+    string name = 2;
+    string role = 3; // "customer" or "admin"
+}
+
+// Request and Response messages
+message AddCarRequest {
+    Car car = 1;
+}
+
+message AddCarResponse {
+    string carId = 1; // Returns the number plate as unique ID
+}
+
+message UpdateCarRequest {
+    string numberPlate = 1;
+    Car updatedCar = 2;
+}
+
+message RemoveCarRequest {
+    string numberPlate = 1;
+}
+
+message RemoveCarResponse {
+    repeated Car cars = 1; // Updated full list of cars
+}
+
+message ListAvailableCarsRequest {
+    string filter = 1; // Optional filter by make/model or year
+}
+
+message SearchCarRequest {
+    string numberPlate = 1;
+}
+
+message SearchCarResponse {
+    Car car = 1;
+    string message = 2; // Status message
+}
+
+message AddToCartRequest {
+    string userId = 1;
+    string numberPlate = 2;
+    string startDate = 3;
+    string endDate = 4;
+}
+
+message CartItem {
+    string numberPlate = 1;
+    string startDate = 2;
+    string endDate = 3;
+    Car car = 4;
+}
+
+message PlaceReservationRequest {
+    string userId = 1;
+}
+
+message PlaceReservationResponse {
+    string reservationId = 1;
+    float totalPrice = 2;
+    repeated CartItem items = 3;
+}
+
+message CreateUsersResponse {
+    string message = 1;
+}
+
+// Car Rental Service definition
+service CarRentalService {
+    rpc AddCar(AddCarRequest) returns (AddCarResponse);
+    rpc CreateUsers(stream User) returns (CreateUsersResponse);
+    rpc UpdateCar(UpdateCarRequest) returns (Car);
+    rpc RemoveCar(RemoveCarRequest) returns (RemoveCarResponse);
+    rpc ListAvailableCars(ListAvailableCarsRequest) returns (stream Car);
+    rpc SearchCar(SearchCarRequest) returns (SearchCarResponse);
+    rpc AddToCart(AddToCartRequest) returns (google.protobuf.Empty);
+    rpc PlaceReservation(PlaceReservationRequest) returns (PlaceReservationResponse);
+}
