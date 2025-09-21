@@ -150,7 +150,8 @@ service /asset_management on new http:Listener(9090) {
         return overdueAssets;
     }
 // Component Management
-    
+
+
     // Add component to asset
     resource function post assets/[string assetTag]/components(@http:Payload Component newComponent) returns Component|http:NotFound {
         Asset? assetOpt = assetDatabase[assetTag];
@@ -180,3 +181,126 @@ service /asset_management on new http:Listener(9090) {
         assetDatabase.put(asset);
         return removedComponent;
     }
+
+// Schedule Management
+    
+    // Add schedule to asset
+    resource function post assets/[string assetTag]/schedules(@http:Payload Schedule newSchedule) returns Schedule|http:NotFound {
+        Asset? assetOpt = assetDatabase[assetTag];
+        if (assetOpt is ()) {
+            return http:NOT_FOUND;
+        }
+        
+        Asset asset = assetOpt;
+        asset.schedules[newSchedule.scheduleId] = newSchedule;
+        assetDatabase.put(asset);
+        return newSchedule;
+    }
+
+    // Remove schedule from asset
+    resource function delete assets/[string assetTag]/schedules/[string scheduleId]() returns Schedule|http:NotFound {
+        Asset? assetOpt = assetDatabase[assetTag];
+        if (assetOpt is ()) {
+            return http:NOT_FOUND;
+        }
+        
+        Asset asset = assetOpt;
+        if (!asset.schedules.hasKey(scheduleId)) {
+            return http:NOT_FOUND;
+        }
+        
+        Schedule removedSchedule = asset.schedules.remove(scheduleId);
+        assetDatabase.put(asset);
+        return removedSchedule;
+    }
+
+    // Work Order Management
+    
+    // Create work order
+    resource function post assets/[string assetTag]/workorders(@http:Payload WorkOrder newWorkOrder) returns WorkOrder|http:NotFound {
+        Asset? assetOpt = assetDatabase[assetTag];
+        if (assetOpt is ()) {
+            return http:NOT_FOUND;
+        }
+        
+        Asset asset = assetOpt;
+        asset.workOrders[newWorkOrder.workOrderId] = newWorkOrder;
+        assetDatabase.put(asset);
+        return newWorkOrder;
+    }
+
+    // Update work order
+    resource function put assets/[string assetTag]/workorders/[string workOrderId](@http:Payload WorkOrder updatedWorkOrder) returns WorkOrder|http:NotFound {
+        Asset? assetOpt = assetDatabase[assetTag];
+        if (assetOpt is ()) {
+            return http:NOT_FOUND;
+        }
+        
+        Asset asset = assetOpt;
+        WorkOrder? workOrderOpt = asset.workOrders[workOrderId];
+        if (workOrderOpt is ()) {
+            return http:NOT_FOUND;
+        }
+        
+        asset.workOrders[workOrderId] = updatedWorkOrder;
+        assetDatabase.put(asset);
+        return updatedWorkOrder;
+    }
+
+    // Task Management
+    
+    // Add task to work order
+    resource function post assets/[string assetTag]/workorders/[string workOrderId]/tasks(@http:Payload Task newTask) returns Task|http:NotFound {
+        Asset? assetOpt = assetDatabase[assetTag];
+        if (assetOpt is ()) {
+            return http:NOT_FOUND;
+        }
+        
+        Asset asset = assetOpt;
+        WorkOrder? workOrderOpt = asset.workOrders[workOrderId];
+        if (workOrderOpt is ()) {
+            return http:NOT_FOUND;
+        }
+        
+        WorkOrder workOrder = workOrderOpt;
+        workOrder.tasks.push(newTask);
+        asset.workOrders[workOrderId] = workOrder;
+        assetDatabase.put(asset);
+        return newTask;
+    }
+
+    // Remove task from work order
+    resource function delete assets/[string assetTag]/workorders/[string workOrderId]/tasks/[string taskId]() returns Task|http:NotFound {
+        Asset? assetOpt = assetDatabase[assetTag];
+        if (assetOpt is ()) {
+            return http:NOT_FOUND;
+        }
+        
+        Asset asset = assetOpt;
+        WorkOrder? workOrderOpt = asset.workOrders[workOrderId];
+        if (workOrderOpt is ()) {
+            return http:NOT_FOUND;
+        }
+        
+        WorkOrder workOrder = workOrderOpt;
+        Task? removedTask = ();
+        Task[] newTasks = [];
+        
+        foreach Task task in workOrder.tasks {
+            if (task.taskId == taskId) {
+                removedTask = task;
+            } else {
+                newTasks.push(task);
+            }
+        }
+        
+        if (removedTask is ()) {
+            return http:NOT_FOUND;
+        }
+        
+        workOrder.tasks = newTasks;
+        asset.workOrders[workOrderId] = workOrder;
+        assetDatabase.put(asset);
+        return removedTask;
+    }
+}
