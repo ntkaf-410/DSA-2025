@@ -139,4 +139,11 @@ function demonstrateAssetManagement() returns error? {
             io:println("- " + asset.assetTag + ": " + asset.name + " (" + asset.faculty + ")");
         }
     }
-    
+
+// 3. Viewing by faculty
+    io:println("\n3. Viewing assets by faculty...");
+    Asset[]|error facultyAssets = assetClient->/assets/faculty/["Computing & Informatics"];
+    if facultyAssets is Asset[] {
+        io:println("Assets in Computing & Informatics: " + facultyAssets.length().toString());
+    }
+        
