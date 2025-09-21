@@ -373,3 +373,42 @@ function checkOverdueAssets() returns error? {
         io:println("✗ Error checking overdue assets: " + assets.message());
     }
 }
+function manageComponents() returns error? {
+    io:println("\n--- Component Management ---");
+    io:println("1. Add component");
+    io:println("2. Remove component");
+    
+    string choice = io:readln("Choose action (1-2): ");
+    
+    if choice == "1" {
+        string assetTag = io:readln("Asset Tag: ");
+        string componentId = io:readln("Component ID: ");
+        string name = io:readln("Component Name: ");
+        string description = io:readln("Description: ");
+        string status = io:readln("Status: ");
+        
+        Component component = {
+            componentId: componentId,
+            name: name,
+            description: description,
+            status: status
+        };
+        
+        Component|error result = assetClient->/assets/[assetTag]/components.post(component);
+        if result is Component {
+            io:println("✓ Component added successfully.");
+        } else {
+            io:println("✗ Error adding component: " + result.message());
+        }
+    } else if choice == "2" {
+        string assetTag = io:readln("Asset Tag: ");
+        string componentId = io:readln("Component ID to remove: ");
+        
+        Component|error result = assetClient->/assets/[assetTag]/components/[componentId].delete();
+        if result is Component {
+            io:println("✓ Component removed successfully.");
+        } else {
+            io:println("✗ Error removing component: " + result.message());
+        }
+    }
+}
