@@ -30,8 +30,16 @@ Jedidja Mbinga 224016148
 
 1. Added support for creating new schedules using POST, assets, assetTag, and schedules
 2. Enabled schedule removal via DELETE, assets,assetTag, schedules, and scheduleId
-
 3. Implemented POST, assets, assetTag, and workorders to create work order
-4. Implemented updates to existing work orders through PUT, assets, assetTag, workorders, andworkOrderId
+4. Implemented updates to existing work orders through PUT, assets, assetTag, workorders, andworkOrderId`
+
+Petrus Amukugo 224032119
+
+1. Added POST endpoint to create tasks
+2. Added DELETE endpoint to remove tasks
+3. Added task work order relationship logic
+4. Handled nested data operations
+
+
 
 
