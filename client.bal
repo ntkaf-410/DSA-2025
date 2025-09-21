@@ -338,3 +338,38 @@ function deleteAsset() returns error? {
     }
 }
 
+function viewAssetsByFaculty() returns error? {
+    io:println("\n--- View Assets by Faculty ---");
+    string faculty = io:readln("Faculty name: ");
+    
+    Asset[]|error assets = assetClient->/assets/faculty/[faculty];
+    if assets is Asset[] {
+        if assets.length() == 0 {
+            io:println("No assets found in " + faculty);
+        } else {
+            io:println("Assets in " + faculty + ":");
+            foreach Asset asset in assets {
+                io:println("- " + asset.assetTag + ": " + asset.name);
+            }
+        }
+    } else {
+        io:println("✗ Error retrieving assets: " + assets.message());
+    }
+}
+
+function checkOverdueAssets() returns error? {
+    io:println("\n--- Overdue Maintenance Check ---");
+    Asset[]|error assets = assetClient->/assets/overdue;
+    if assets is Asset[] {
+        if assets.length() == 0 {
+            io:println("No assets have overdue maintenance.");
+        } else {
+            io:println("Assets with overdue maintenance:");
+            foreach Asset asset in assets {
+                io:println("⚠️  " + asset.assetTag + ": " + asset.name);
+            }
+        }
+    } else {
+        io:println("✗ Error checking overdue assets: " + assets.message());
+    }
+}
