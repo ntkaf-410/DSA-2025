@@ -149,3 +149,34 @@ service /asset_management on new http:Listener(9090) {
         }
         return overdueAssets;
     }
+// Component Management
+    
+    // Add component to asset
+    resource function post assets/[string assetTag]/components(@http:Payload Component newComponent) returns Component|http:NotFound {
+        Asset? assetOpt = assetDatabase[assetTag];
+        if (assetOpt is ()) {
+            return http:NOT_FOUND;
+        }
+        
+        Asset asset = assetOpt;
+        asset.components[newComponent.componentId] = newComponent;
+        assetDatabase.put(asset);
+        return newComponent;
+    }
+
+    // Remove component from asset
+    resource function delete assets/[string assetTag]/components/[string componentId]() returns Component|http:NotFound {
+        Asset? assetOpt = assetDatabase[assetTag];
+        if (assetOpt is ()) {
+            return http:NOT_FOUND;
+        }
+        
+        Asset asset = assetOpt;
+        if (!asset.components.hasKey(componentId)) {
+            return http:NOT_FOUND;
+        }
+        
+        Component removedComponent = asset.components.remove(componentId);
+        assetDatabase.put(asset);
+        return removedComponent;
+    }
