@@ -146,4 +146,17 @@ function demonstrateAssetManagement() returns error? {
     if facultyAssets is Asset[] {
         io:println("Assets in Computing & Informatics: " + facultyAssets.length().toString());
     }
-        
+
+    // 8. Filter cars by make
+    io:println("8. Filtering cars by 'Toyota'...");
+    ListAvailableCarsRequest filterReq = {filter: "toyota"};
+    stream<Car, error?> filteredStream = check ep->ListAvailableCars(filterReq);
+    
+    check from Car car in filteredStream
+        do {
+            io:println("Filtered: ", car.make, " ", car.model);
+        };
+    io:println();
+
+    // 9. Remove a car (Admin operation)
+    io:println("9. Removing a car from inventory..."); 
