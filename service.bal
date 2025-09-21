@@ -59,3 +59,65 @@ type Asset record {
 table<Asset> key(assetTag) assetDatabase = table [];
 
 service /asset_management on new http:Listener(9090) {
+
+  // Create a new asset
+    resource function post assets(@http:Payload Asset newAsset) returns Asset|http:BadRequest|http:Conflict {
+        if (assetDatabase.hasKey(newAsset.assetTag)) {
+            return http:CONFLICT;
+        }
+        assetDatabase.put(newAsset);
+        return newAsset;
+    }
+
+    // Get all assets
+    resource function get assets() returns Asset[] {
+        Asset[] allAssets = [];
+        foreach Asset asset in assetDatabase {
+            allAssets.push(asset);
+        }
+        return allAssets;
+    }
+
+    // Get asset by tag
+    resource function get assets/[string assetTag]() returns Asset|http:NotFound {
+        Asset? asset = assetDatabase[assetTag];
+        if (asset is ()) {
+            return http:NOT_FOUND;
+        }
+        return asset;
+    }
+
+    // Update asset
+    resource function put assets/[string assetTag](@http:Payload Asset updatedAsset) returns Asset|http:NotFound {
+        Asset? existingAssetOpt = assetDatabase[assetTag];
+        if (existingAssetOpt is ()) {
+            return http:NOT_FOUND;
+        }
+        
+        Asset existingAsset = existingAssetOpt;
+        
+        // Update fields while preserving the key
+        Asset newAsset = {
+            assetTag: existingAsset.assetTag, // Keep the original key
+            name: updatedAsset.name != "" ? updatedAsset.name : existingAsset.name,
+            faculty: updatedAsset.faculty != "" ? updatedAsset.faculty : existingAsset.faculty,
+            department: updatedAsset.department != "" ? updatedAsset.department : existingAsset.department,
+            status: updatedAsset.status,
+            acquiredDate: updatedAsset.acquiredDate != "" ? updatedAsset.acquiredDate : existingAsset.acquiredDate,
+            components: updatedAsset.components.length() > 0 ? updatedAsset.components : existingAsset.components,
+            schedules: updatedAsset.schedules.length() > 0 ? updatedAsset.schedules : existingAsset.schedules,
+            workOrders: updatedAsset.workOrders.length() > 0 ? updatedAsset.workOrders : existingAsset.workOrders
+        };
+        
+        assetDatabase.put(newAsset);
+        return newAsset;
+    }
+
+    // Delete asset
+    resource function delete assets/[string assetTag]() returns Asset|http:NotFound {
+        Asset? asset = assetDatabase[assetTag];
+        if (asset is ()) {
+            return http:NOT_FOUND;
+        }
+        return assetDatabase.remove(assetTag);
+    }
