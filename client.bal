@@ -187,3 +187,41 @@ function demonstrateAssetManagement() returns error? {
     
     io:println("\n=== Demonstration Complete ===");
 }
+function handleMenuChoice(string choice) returns error? {
+    match choice {
+        "1" => {
+            check addNewAsset();
+        }
+        "2" => {
+            check viewAllAssets();
+        }
+        "3" => {
+            check viewAssetByTag();
+        }
+        "4" => {
+            check updateAsset();
+        }
+        "5" => {
+            check deleteAsset();
+        }
+        "6" => {
+            check viewAssetsByFaculty();
+        }
+        "7" => {
+            check checkOverdueAssets();
+        }
+        "8" => {
+            check manageComponents();
+        }
+        "9" => {
+            check manageSchedules();
+        }
+        "10" => {
+            check manageWorkOrders();
+        }
+        _ => {
+            io:println("Invalid choice. Please try again.");
+        }
+    }
+}
+
