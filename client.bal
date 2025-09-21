@@ -93,3 +93,50 @@ public function main() returns error? {
 function demonstrateAssetManagement() returns error? {
     io:println("=== Demonstrating Asset Management System ===\n");
     
+     // 1. Adding assets
+    io:println("1. Adding sample assets...");
+    
+    Asset printer = {
+        assetTag: "EQ-001",
+        name: "3D Printer",
+        faculty: "Computing & Informatics",
+        department: "Software Engineering",
+        status: ACTIVE,
+        acquiredDate: "2024-03-10",
+        components: {},
+        schedules: {},
+        workOrders: {}
+    };
+    
+    Asset|error printerResult = assetClient->/assets.post(printer);
+    if printerResult is Asset {
+        io:println("✓ Added 3D Printer: " + printerResult.assetTag);
+    }
+    
+    Asset server = {
+        assetTag: "EQ-002",
+        name: "Dell Server",
+        faculty: "Computing & Informatics",
+        department: "Computer Science",
+        status: ACTIVE,
+        acquiredDate: "2020-01-15", // Older for overdue demo
+        components: {},
+        schedules: {},
+        workOrders: {}
+    };
+    
+    Asset|error serverResult = assetClient->/assets.post(server);
+    if serverResult is Asset {
+        io:println("✓ Added Dell Server: " + serverResult.assetTag);
+    }
+    
+    // 2. Viewing all assets
+    io:println("\n2. Viewing all assets...");
+    Asset[]|error allAssets = assetClient->/assets;
+    if allAssets is Asset[] {
+        io:println("Total assets: " + allAssets.length().toString());
+        foreach Asset asset in allAssets {
+            io:println("- " + asset.assetTag + ": " + asset.name + " (" + asset.faculty + ")");
+        }
+    }
+    
