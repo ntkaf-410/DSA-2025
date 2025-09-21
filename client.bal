@@ -147,16 +147,16 @@ function demonstrateAssetManagement() returns error? {
         io:println("Assets in Computing & Informatics: " + facultyAssets.length().toString());
     }
 
-    // 8. Filter cars by make
-    io:println("8. Filtering cars by 'Toyota'...");
-    ListAvailableCarsRequest filterReq = {filter: "toyota"};
-    stream<Car, error?> filteredStream = check ep->ListAvailableCars(filterReq);
+  // 4. Adding a component
+    io:println("\n4. Adding component to 3D Printer...");
+    Component printHead = {
+        componentId: "COMP-001",
+        name: "Print Head",
+        description: "Main printing component",
+        status: "working"
+    };
     
-    check from Car car in filteredStream
-        do {
-            io:println("Filtered: ", car.make, " ", car.model);
-        };
-    io:println();
-
-    // 9. Remove a car (Admin operation)
-    io:println("9. Removing a car from inventory..."); 
+    Component|error componentResult = assetClient->/assets/["EQ-001"]/components.post(printHead);
+    if componentResult is Component {
+        io:println("✓ Added component: " + componentResult.name);
+    }
