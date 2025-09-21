@@ -1,8 +1,4 @@
 # DSA-2025
-Nao Nakangombe 224026569
-1.Endpoints to open/close/update work orders.
-2.Add/remove tasks under a work order.
-
 Ndina Unandapo 224062476
 1.Created Ballerina.toml configuration files
 2.Defined all the core record types(Assets,Components,Schedule,Task.WorkOrder)
@@ -22,4 +18,12 @@ Ndati Kafidi 224066765
 2. Implemented GET /assets/overdue to check for any overdue maintenance schedules
 3. Created the overdue calculation logic using time comparison
 4. Handled date/time parsing and validation
+
+Nao Nakangombe 224026569
+
+1. Added POST /assets/{assetTag}/components to add a component to an asset
+2. Added DELETE /assets/{assetTag}/components/{componentId} to remove a component
+3. Made components attach to the correct asset (they’re stored under that asset)
+4. Saved component information inside the asset data whenever it’s created or updated
+
 
