@@ -1,0 +1,103 @@
+syntax = "proto3";
+
+package car_rental;
+
+import "google/protobuf/empty.proto";
+
+
+
+// Car message definition
+
+message Car {
+
+  string make = 1;
+
+  string model = 2;
+
+  int32 year = 3;
+
+  float dailyPrice = 4;
+
+  int32 mileage = 5;
+
+  string numberPlate = 6;
+
+  string status = 7; // "AVAILABLE" or "UNAVAILABLE"
+
+}
+
+
+
+// Request and Response messages for Car Management
+
+message AddCarRequest {
+
+  Car car = 1;
+
+}
+
+message AddCarResponse {
+
+  string carId = 1; // Returns the number plate as unique ID
+
+}
+
+message UpdateCarRequest {
+
+  string numberPlate = 1;
+
+  Car updatedCar = 2;
+
+}
+
+message RemoveCarRequest {
+
+  string numberPlate = 1;
+
+}
+
+message RemoveCarResponse {
+
+  repeated Car cars = 1; // Updated full list of cars
+
+}
+
+message ListAvailableCarsRequest {
+
+  string filter = 1; // Optional filter by make/model or year
+
+}
+
+message SearchCarRequest {
+
+  string numberPlate = 1;
+
+}
+
+message SearchCarResponse {
+
+  Car car = 1;
+
+  string message = 2; // Status message
+
+}
+
+
+
+// Car Rental Service definition - Inventory Methods
+
+service CarRentalService {
+
+  rpc AddCar(AddCarRequest) returns (AddCarResponse);
+
+  rpc UpdateCar(UpdateCarRequest) returns (Car);
+
+  rpc RemoveCar(RemoveCarRequest) returns (RemoveCarResponse);
+
+  rpc ListAvailableCars(ListAvailableCarsRequest) returns (stream Car);
+
+  rpc SearchCar(SearchCarRequest) returns (SearchCarResponse);
+
+  // Methods for Person 2 will be integrated here later
+
+}
