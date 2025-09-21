@@ -225,3 +225,116 @@ function handleMenuChoice(string choice) returns error? {
     }
 }
 
+
+function addNewAsset() returns error? {
+    io:println("\n--- Add New Asset ---");
+    string assetTag = io:readln("Asset Tag: ");
+    string name = io:readln("Asset Name: ");
+    string faculty = io:readln("Faculty: ");
+    string department = io:readln("Department: ");
+    string statusStr = io:readln("Status (ACTIVE/UNDER_REPAIR/DISPOSED): ");
+    string acquiredDate = io:readln("Acquired Date (YYYY-MM-DD): ");
+    
+    AssetStatus status = statusStr == "UNDER_REPAIR" ? UNDER_REPAIR : 
+                        statusStr == "DISPOSED" ? DISPOSED : ACTIVE;
+    
+    Asset newAsset = {
+        assetTag: assetTag,
+        name: name,
+        faculty: faculty,
+        department: department,
+        status: status,
+        acquiredDate: acquiredDate,
+        components: {},
+        schedules: {},
+        workOrders: {}
+    };
+    
+    Asset|error result = assetClient->/assets.post(newAsset);
+    if result is Asset {
+        io:println("✓ Asset added successfully: " + result.assetTag);
+    } else {
+        io:println("✗ Error adding asset: " + result.message());
+    }
+}
+
+function viewAllAssets() returns error? {
+    io:println("\n--- All Assets ---");
+    Asset[]|error assets = assetClient->/assets;
+    if assets is Asset[] {
+        if assets.length() == 0 {
+            io:println("No assets found.");
+        } else {
+            foreach Asset asset in assets {
+                io:println(asset.assetTag + " | " + asset.name + " | " + asset.faculty + " | " + asset.status.toString());
+            }
+        }
+    } else {
+        io:println("✗ Error retrieving assets: " + assets.message());
+    }
+}
+
+function viewAssetByTag() returns error? {
+    io:println("\n--- View Asset by Tag ---");
+    string assetTag = io:readln("Enter Asset Tag: ");
+    
+    Asset|error asset = assetClient->/assets/[assetTag];
+    if asset is Asset {
+        io:println("Asset Details:");
+        io:println("Tag: " + asset.assetTag);
+        io:println("Name: " + asset.name);
+        io:println("Faculty: " + asset.faculty);
+        io:println("Department: " + asset.department);
+        io:println("Status: " + asset.status.toString());
+        io:println("Acquired: " + asset.acquiredDate);
+        io:println("Components: " + asset.components.length().toString());
+        io:println("Schedules: " + asset.schedules.length().toString());
+        io:println("Work Orders: " + asset.workOrders.length().toString());
+    } else {
+        io:println("✗ Asset not found.");
+    }
+}
+
+function updateAsset() returns error? {
+    io:println("\n--- Update Asset ---");
+    string assetTag = io:readln("Asset Tag to update: ");
+    string name = io:readln("New Asset Name (or press Enter to skip): ");
+    string faculty = io:readln("New Faculty (or press Enter to skip): ");
+    string department = io:readln("New Department (or press Enter to skip): ");
+    string statusStr = io:readln("New Status (ACTIVE/UNDER_REPAIR/DISPOSED, or press Enter to skip): ");
+    
+    AssetStatus status = statusStr == "UNDER_REPAIR" ? UNDER_REPAIR : 
+                        statusStr == "DISPOSED" ? DISPOSED : ACTIVE;
+    
+    Asset updatedAsset = {
+        assetTag: assetTag,
+        name: name,
+        faculty: faculty,
+        department: department,
+        status: status,
+        acquiredDate: "",
+        components: {},
+        schedules: {},
+        workOrders: {}
+    };
+    
+    Asset|error result = assetClient->/assets/[assetTag].put(updatedAsset);
+    if result is Asset {
+        io:println("✓ Asset updated successfully.");
+    } else {
+        io:println("✗ Error updating asset: " + result.message());
+    }
+}
+
+function deleteAsset() returns error? {
+    io:println("\n--- Delete Asset ---");
+    string assetTag = io:readln("Asset Tag to delete: ");
+    
+    Asset|error result = assetClient->/assets/[assetTag].delete();
+    if result is Asset {
+        io:println("✓ Asset deleted: " + result.assetTag);
+    } else {
+        io:println("✗ Error deleting asset: " + result.message());
+    }
+}
+
