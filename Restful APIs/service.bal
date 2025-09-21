@@ -121,3 +121,31 @@ service /asset_management on new http:Listener(9090) {
         }
         return assetDatabase.remove(assetTag);
     }
+
+// Get assets by faculty
+    resource function get assets/faculty/[string faculty]() returns Asset[] {
+        Asset[] facultyAssets = [];
+        foreach Asset asset in assetDatabase {
+            if (asset.faculty == faculty) {
+                facultyAssets.push(asset);
+            }
+        }
+        return facultyAssets;
+    }
+
+    // Get overdue assets
+    resource function get assets/overdue() returns Asset[]|error {
+        Asset[] overdueAssets = [];
+        time:Utc currentTime = time:utcNow();
+        
+        foreach Asset asset in assetDatabase {
+            foreach Schedule schedule in asset.schedules {
+                time:Utc|time:Error dueTime = time:utcFromString(schedule.nextDueDate);
+                if (dueTime is time:Utc && time:utcDiffSeconds(currentTime, dueTime) > 0.0d) {
+                    overdueAssets.push(asset);
+                    break; // Asset already added, no need to check other schedules
+                }
+            }
+        }
+        return overdueAssets;
+    }
