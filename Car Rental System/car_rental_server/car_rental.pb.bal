@@ -315,3 +315,360 @@ public isolated client class CarRentalServiceRemoveCarResponseCaller {
         return self.caller.isCancelled();
     }
 }
+
+public isolated client class CarRentalServiceSearchCarResponseCaller {
+    private final grpc:Caller caller;
+
+    public isolated function init(grpc:Caller caller) {
+        self.caller = caller;
+    }
+
+    public isolated function getId() returns int {
+        return self.caller.getId();
+    }
+
+    isolated remote function sendSearchCarResponse(SearchCarResponse response) returns grpc:Error? {
+        return self.caller->send(response);
+    }
+
+    isolated remote function sendContextSearchCarResponse(ContextSearchCarResponse response) returns grpc:Error? {
+        return self.caller->send(response);
+    }
+
+    isolated remote function sendError(grpc:Error response) returns grpc:Error? {
+        return self.caller->sendError(response);
+    }
+
+    isolated remote function complete() returns grpc:Error? {
+        return self.caller->complete();
+    }
+
+    public isolated function isCancelled() returns boolean {
+        return self.caller.isCancelled();
+    }
+}
+
+public isolated client class CarRentalServiceNilCaller {
+    private final grpc:Caller caller;
+
+    public isolated function init(grpc:Caller caller) {
+        self.caller = caller;
+    }
+
+    public isolated function getId() returns int {
+        return self.caller.getId();
+    }
+
+    isolated remote function sendError(grpc:Error response) returns grpc:Error? {
+        return self.caller->sendError(response);
+    }
+
+    isolated remote function complete() returns grpc:Error? {
+        return self.caller->complete();
+    }
+
+    public isolated function isCancelled() returns boolean {
+        return self.caller.isCancelled();
+    }
+}
+
+public isolated client class CarRentalServiceAddCarResponseCaller {
+    private final grpc:Caller caller;
+
+    public isolated function init(grpc:Caller caller) {
+        self.caller = caller;
+    }
+
+    public isolated function getId() returns int {
+        return self.caller.getId();
+    }
+
+    isolated remote function sendAddCarResponse(AddCarResponse response) returns grpc:Error? {
+        return self.caller->send(response);
+    }
+
+    isolated remote function sendContextAddCarResponse(ContextAddCarResponse response) returns grpc:Error? {
+        return self.caller->send(response);
+    }
+
+    isolated remote function sendError(grpc:Error response) returns grpc:Error? {
+        return self.caller->sendError(response);
+    }
+
+    isolated remote function complete() returns grpc:Error? {
+        return self.caller->complete();
+    }
+
+    public isolated function isCancelled() returns boolean {
+        return self.caller.isCancelled();
+    }
+}
+
+public isolated client class CarRentalServiceCarCaller {
+    private final grpc:Caller caller;
+
+    public isolated function init(grpc:Caller caller) {
+        self.caller = caller;
+    }
+
+    public isolated function getId() returns int {
+        return self.caller.getId();
+    }
+
+    isolated remote function sendCar(Car response) returns grpc:Error? {
+        return self.caller->send(response);
+    }
+
+    isolated remote function sendContextCar(ContextCar response) returns grpc:Error? {
+        return self.caller->send(response);
+    }
+
+    isolated remote function sendError(grpc:Error response) returns grpc:Error? {
+        return self.caller->sendError(response);
+    }
+
+    isolated remote function complete() returns grpc:Error? {
+        return self.caller->complete();
+    }
+
+    public isolated function isCancelled() returns boolean {
+        return self.caller.isCancelled();
+    }
+}
+
+public isolated client class CarRentalServicePlaceReservationResponseCaller {
+    private final grpc:Caller caller;
+
+    public isolated function init(grpc:Caller caller) {
+        self.caller = caller;
+    }
+
+    public isolated function getId() returns int {
+        return self.caller.getId();
+    }
+
+    isolated remote function sendPlaceReservationResponse(PlaceReservationResponse response) returns grpc:Error? {
+        return self.caller->send(response);
+    }
+
+    isolated remote function sendContextPlaceReservationResponse(ContextPlaceReservationResponse response) returns grpc:Error? {
+        return self.caller->send(response);
+    }
+
+    isolated remote function sendError(grpc:Error response) returns grpc:Error? {
+        return self.caller->sendError(response);
+    }
+
+    isolated remote function complete() returns grpc:Error? {
+        return self.caller->complete();
+    }
+
+    public isolated function isCancelled() returns boolean {
+        return self.caller.isCancelled();
+    }
+}
+
+public isolated client class CarRentalServiceCreateUsersResponseCaller {
+    private final grpc:Caller caller;
+
+    public isolated function init(grpc:Caller caller) {
+        self.caller = caller;
+    }
+
+    public isolated function getId() returns int {
+        return self.caller.getId();
+    }
+
+    isolated remote function sendCreateUsersResponse(CreateUsersResponse response) returns grpc:Error? {
+        return self.caller->send(response);
+    }
+
+    isolated remote function sendContextCreateUsersResponse(ContextCreateUsersResponse response) returns grpc:Error? {
+        return self.caller->send(response);
+    }
+
+    isolated remote function sendError(grpc:Error response) returns grpc:Error? {
+        return self.caller->sendError(response);
+    }
+
+    isolated remote function complete() returns grpc:Error? {
+        return self.caller->complete();
+    }
+
+    public isolated function isCancelled() returns boolean {
+        return self.caller.isCancelled();
+    }
+}
+
+public type ContextUserStream record {|
+    stream<User, error?> content;
+    map<string|string[]> headers;
+|};
+
+public type ContextCarStream record {|
+    stream<Car, error?> content;
+    map<string|string[]> headers;
+|};
+
+public type ContextUser record {|
+    User content;
+    map<string|string[]> headers;
+|};
+
+public type ContextPlaceReservationResponse record {|
+    PlaceReservationResponse content;
+    map<string|string[]> headers;
+|};
+
+public type ContextRemoveCarRequest record {|
+    RemoveCarRequest content;
+    map<string|string[]> headers;
+|};
+
+public type ContextUpdateCarRequest record {|
+    UpdateCarRequest content;
+    map<string|string[]> headers;
+|};
+
+public type ContextAddCarResponse record {|
+    AddCarResponse content;
+    map<string|string[]> headers;
+|};
+
+public type ContextAddToCartRequest record {|
+    AddToCartRequest content;
+    map<string|string[]> headers;
+|};
+
+public type ContextListAvailableCarsRequest record {|
+    ListAvailableCarsRequest content;
+    map<string|string[]> headers;
+|};
+
+public type ContextSearchCarRequest record {|
+    SearchCarRequest content;
+    map<string|string[]> headers;
+|};
+
+public type ContextAddCarRequest record {|
+    AddCarRequest content;
+    map<string|string[]> headers;
+|};
+
+public type ContextRemoveCarResponse record {|
+    RemoveCarResponse content;
+    map<string|string[]> headers;
+|};
+
+public type ContextCar record {|
+    Car content;
+    map<string|string[]> headers;
+|};
+
+public type ContextPlaceReservationRequest record {|
+    PlaceReservationRequest content;
+    map<string|string[]> headers;
+|};
+
+public type ContextSearchCarResponse record {|
+    SearchCarResponse content;
+    map<string|string[]> headers;
+|};
+
+public type ContextCreateUsersResponse record {|
+    CreateUsersResponse content;
+    map<string|string[]> headers;
+|};
+
+@protobuf:Descriptor {value: CAR_RENTAL_DESC}
+public type User record {|
+    string userId = "";
+    string name = "";
+    string role = "";
+|};
+
+@protobuf:Descriptor {value: CAR_RENTAL_DESC}
+public type PlaceReservationResponse record {|
+    string reservationId = "";
+    float totalPrice = 0.0;
+    CartItem[] items = [];
+|};
+
+@protobuf:Descriptor {value: CAR_RENTAL_DESC}
+public type RemoveCarRequest record {|
+    string numberPlate = "";
+|};
+
+@protobuf:Descriptor {value: CAR_RENTAL_DESC}
+public type UpdateCarRequest record {|
+    string numberPlate = "";
+    Car updatedCar = {};
+|};
+
+@protobuf:Descriptor {value: CAR_RENTAL_DESC}
+public type AddCarResponse record {|
+    string carId = "";
+|};
+
+@protobuf:Descriptor {value: CAR_RENTAL_DESC}
+public type CartItem record {|
+    string numberPlate = "";
+    string startDate = "";
+    string endDate = "";
+    Car car = {};
+|};
+
+@protobuf:Descriptor {value: CAR_RENTAL_DESC}
+public type AddToCartRequest record {|
+    string userId = "";
+    string numberPlate = "";
+    string startDate = "";
+    string endDate = "";
+|};
+
+@protobuf:Descriptor {value: CAR_RENTAL_DESC}
+public type ListAvailableCarsRequest record {|
+    string filter = "";
+|};
+
+@protobuf:Descriptor {value: CAR_RENTAL_DESC}
+public type SearchCarRequest record {|
+    string numberPlate = "";
+|};
+
+@protobuf:Descriptor {value: CAR_RENTAL_DESC}
+public type AddCarRequest record {|
+    Car car = {};
+|};
+
+@protobuf:Descriptor {value: CAR_RENTAL_DESC}
+public type RemoveCarResponse record {|
+    Car[] cars = [];
+|};
+
+@protobuf:Descriptor {value: CAR_RENTAL_DESC}
+public type Car record {|
+    string make = "";
+    string model = "";
+    int year = 0;
+    float dailyPrice = 0.0;
+    int mileage = 0;
+    string numberPlate = "";
+    string status = "";
+|};
+
+@protobuf:Descriptor {value: CAR_RENTAL_DESC}
+public type PlaceReservationRequest record {|
+    string userId = "";
+|};
+
+@protobuf:Descriptor {value: CAR_RENTAL_DESC}
+public type SearchCarResponse record {|
+    Car car = {};
+    string message = "";
+|};
+
+@protobuf:Descriptor {value: CAR_RENTAL_DESC}
+public type CreateUsersResponse record {|
+    string message = "";
+|};
