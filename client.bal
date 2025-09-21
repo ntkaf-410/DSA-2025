@@ -175,3 +175,15 @@ function demonstrateAssetManagement() returns error? {
         io:println("✓ Added maintenance schedule: " + scheduleResult.scheduleType);
     }
     
+    // 6. Checking overdue items
+    io:println("\n6. Checking for overdue maintenance...");
+    Asset[]|error overdueAssets = assetClient->/assets/overdue;
+    if overdueAssets is Asset[] {
+        io:println("Overdue assets: " + overdueAssets.length().toString());
+        foreach Asset asset in overdueAssets {
+            io:println("⚠️  " + asset.assetTag + ": " + asset.name + " has overdue maintenance");
+        }
+    }
+    
+    io:println("\n=== Demonstration Complete ===");
+}
