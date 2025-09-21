@@ -373,6 +373,7 @@ function checkOverdueAssets() returns error? {
         io:println("✗ Error checking overdue assets: " + assets.message());
     }
 }
+
 function manageComponents() returns error? {
     io:println("\n--- Component Management ---");
     io:println("1. Add component");
@@ -409,6 +410,112 @@ function manageComponents() returns error? {
             io:println("✓ Component removed successfully.");
         } else {
             io:println("✗ Error removing component: " + result.message());
+        }
+    }
+}
+
+function manageSchedules() returns error? {
+    io:println("\n--- Schedule Management ---");
+    io:println("1. Add schedule");
+    io:println("2. Remove schedule");
+    
+    string choice = io:readln("Choose action (1-2): ");
+    
+    if choice == "1" {
+        string assetTag = io:readln("Asset Tag: ");
+        string scheduleId = io:readln("Schedule ID: ");
+        string scheduleType = io:readln("Schedule Type (e.g., quarterly, yearly): ");
+        string nextDueDate = io:readln("Next Due Date (YYYY-MM-DDTHH:MM:SSZ): ");
+        string description = io:readln("Description: ");
+        
+        Schedule schedule = {
+            scheduleId: scheduleId,
+            scheduleType: scheduleType,
+            nextDueDate: nextDueDate,
+            description: description
+        };
+        
+        Schedule|error result = assetClient->/assets/[assetTag]/schedules.post(schedule);
+        if result is Schedule {
+            io:println(" Schedule added successfully.");
+        } else {
+            io:println(" Error adding schedule: " + result.message());
+        }
+    } else if choice == "2" {
+        string assetTag = io:readln("Asset Tag: ");
+        string scheduleId = io:readln("Schedule ID to remove: ");
+        
+        Schedule|error result = assetClient->/assets/[assetTag]/schedules/[scheduleId].delete();
+        if result is Schedule {
+            io:println(" Schedule removed successfully.");
+        } else {
+            io:println(" Error removing schedule: " + result.message());
+        }
+    }
+}
+
+function manageWorkOrders() returns error? {
+    io:println("\n--- Work Order Management ---");
+    io:println("1. Create work order");
+    io:println("2. Add task to work order");
+    io:println("3. Remove task from work order");
+    
+    string choice = io:readln("Choose action (1-3): ");
+    
+    if choice == "1" {
+        string assetTag = io:readln("Asset Tag: ");
+        string workOrderId = io:readln("Work Order ID: ");
+        string description = io:readln("Description: ");
+        string status = io:readln("Status (open/in_progress/closed): ");
+        string createdDate = io:readln("Created Date (YYYY-MM-DD): ");
+        string priority = io:readln("Priority (low/medium/high): ");
+        
+        WorkOrder workOrder = {
+            workOrderId: workOrderId,
+            description: description,
+            status: status,
+            createdDate: createdDate,
+            priority: priority,
+            tasks: []
+        };
+        
+        WorkOrder|error result = assetClient->/assets/[assetTag]/workorders.post(workOrder);
+        if result is WorkOrder {
+            io:println(" Work order created successfully.");
+        } else {
+            io:println(" Error creating work order: " + result.message());
+        }
+    } else if choice == "2" {
+        string assetTag = io:readln("Asset Tag: ");
+        string workOrderId = io:readln("Work Order ID: ");
+        string taskId = io:readln("Task ID: ");
+        string description = io:readln("Task Description: ");
+        string status = io:readln("Task Status: ");
+        string assignedTo = io:readln("Assigned To (optional): ");
+        
+        Task task = {
+            taskId: taskId,
+            description: description,
+            status: status,
+            assignedTo: assignedTo != "" ? assignedTo : ()
+        };
+        
+        Task|error result = assetClient->/assets/[assetTag]/workorders/[workOrderId]/tasks.post(task);
+        if result is Task {
+            io:println(" Task added successfully.");
+        } else {
+            io:println(" Error adding task: " + result.message());
+        }
+    } else if choice == "3" {
+        string assetTag = io:readln("Asset Tag: ");
+        string workOrderId = io:readln("Work Order ID: ");
+        string taskId = io:readln("Task ID to remove: ");
+        
+        Task|error result = assetClient->/assets/[assetTag]/workorders/[workOrderId]/tasks/[taskId].delete();
+        if result is Task {
+            io:println(" Task removed successfully.");
+        } else {
+            io:println(" Error removing task: " + result.message());
         }
     }
 }
