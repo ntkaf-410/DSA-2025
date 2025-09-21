@@ -16,3 +16,10 @@ Atuhe Kambonde 224016172
 4.Implemented GET /assets/[assetTag] (view asset by tag)
 5.Implemented PUT /assets/[assetTag] (update asset)
 6.Implemented DELETE /assets/[assetTag] (delete asset)
+
+Ndati Kafidi 224066765
+1. Implemented GET /assets/faculty to view assets by faculty
+2. Implemented GET /assets/overdue to check for any overdue maintenance schedules
+3. Created the overdue calculation logic using time comparison
+4. Handled date/time parsing and validation
+
