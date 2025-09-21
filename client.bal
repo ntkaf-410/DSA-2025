@@ -160,3 +160,18 @@ function demonstrateAssetManagement() returns error? {
     if componentResult is Component {
         io:println("✓ Added component: " + componentResult.name);
     }
+
+// 5. Adding a schedule (overdue for demonstration)
+    io:println("\n5. Adding maintenance schedule...");
+    Schedule maintenance = {
+        scheduleId: "SCH-001",
+        scheduleType: "quarterly",
+        nextDueDate: "2024-01-01T00:00:00Z", // Past date for overdue demo
+        description: "Quarterly maintenance check"
+    };
+    
+    Schedule|error scheduleResult = assetClient->/assets/["EQ-002"]/schedules.post(maintenance);
+    if scheduleResult is Schedule {
+        io:println("✓ Added maintenance schedule: " + scheduleResult.scheduleType);
+    }
+    
